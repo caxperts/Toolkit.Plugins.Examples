@@ -1,0 +1,101 @@
+/*
+ * Ordinary CSS — no scoping here on purpose.
+ *
+ * The build prefixes EVERY selector below with `.tk-plugin-hello`, rewrites :root/html/body to that
+ * wrapper, and namespaces @keyframes. So `.hello-title` cannot leak into the host, and neither could
+ * a `.header` or `.dx-datagrid` rule if this file had one. Write CSS normally; the build scopes it.
+ *
+ * Colours come from the host's theme variables only, which is what makes this readable in Dark and
+ * Vienna with no conditional rules (REQUIRED_DOCS/THEMING.md).
+ */
+
+.hello-page {
+  padding: 24px;
+  color: var(--system-font-color);
+  background: var(--system-background-primary);
+}
+
+/* Vienna inverts some surfaces; the component adds this class via useTheme().isVienna. */
+.hello-page-vienna .hello-title {
+  color: var(--system-color-highlight-color);
+}
+
+.hello-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+}
+
+.hello-line {
+  margin: 4px 0;
+  color: var(--system-color-gray-text-color);
+}
+
+.hello-actions {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.hello-button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--generic-corner-radius);
+  background: var(--hover-gradient);
+  color: var(--system-font-color);
+  cursor: pointer;
+}
+
+.hello-button:hover {
+  background: var(--active-gradient);
+}
+
+.hello-button:focus-visible {
+  outline: none;
+  background: var(--focus-gradient);
+}
+
+/* Disabled has to LOOK disabled, or a user keeps clicking a button that is mid-save. */
+.hello-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.hello-button-subtle {
+  padding: 2px 10px;
+  font-size: 12px;
+}
+
+.hello-input {
+  padding: 6px 10px;
+  border: 1px solid var(--system-color-gray-text-color);
+  border-radius: var(--generic-corner-radius);
+  background: var(--system-background-component);
+  color: var(--system-font-color);
+  min-width: 220px;
+}
+
+.hello-input:focus-visible {
+  outline: none;
+  border-color: var(--system-color-highlight-color);
+}
+
+.hello-input::placeholder {
+  color: var(--system-color-gray-text-color);
+}
+
+.hello-grid {
+  max-width: 480px;
+  margin-top: 16px;
+  animation: hello-fade 200ms ease-in;
+}
+
+/* Renamed to `tk-plugin-hello-hello-fade` by the build, along with the reference above. */
+@keyframes hello-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

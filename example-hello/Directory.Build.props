@@ -1,0 +1,46 @@
+<Project>
+
+  <!--
+    Build settings for the example plugin's backend, and the documented template for a partner's own.
+
+    They live here rather than in server/Example.Hello.csproj because a plugin sits OUTSIDE backend/ and
+    therefore inherits nothing from backend/Directory.Build.props — a partner's plugin has no access to
+    it either. Every property below is one the plugin has to state for itself, and stating them once here
+    keeps the csproj to what is actually specific to this project.
+
+    This file travels with the folder, which is what makes "copy plugin-kit/example-hello/" a working
+    starting point. MSBuild walks UP from the project directory and stops at the first
+    Directory.Build.props it finds, so this shadows nothing (there is no repository-root one).
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!--
+      Same exemption backend/Directory.Build.props carries, and needed for the same reason: NU1900 is
+      "could not REACH the vulnerability database", not "a vulnerability was found". The real findings
+      are NU1901-NU1904 and stay errors. Without this, TreatWarningsAsErrors turns the audit's own
+      connectivity failure into a build failure — including for a partner building offline.
+    -->
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1900</WarningsNotAsErrors>
+
+    <!--
+      Debug-NoLicensing is listed because the host's test projects reference the plugin for build order
+      and are themselves built in that configuration. Nothing in a plugin touches licensing; the
+      configuration only has to exist so the output lands in bin/Debug-NoLicensing/ where those projects'
+      fixture-staging targets look for it. A partner can drop it.
+    -->
+    <Configurations>Debug;Debug-NoLicensing;Release</Configurations>
+
+    <!--
+      Emits a *.deps.json next to the assembly so the host's AssemblyDependencyResolver can find the
+      plugin's PRIVATE dependencies. It also copies dependencies into the output; the host delegates
+      everything it owns back to its own load context, so those copies are inert.
+    -->
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+
+</Project>

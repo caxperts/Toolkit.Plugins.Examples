@@ -1,0 +1,70 @@
+{
+  /*
+   * The tsconfig base a PLUGIN extends. Ships in the npm package; a plugin's own tsconfig.json is
+   * then four lines:
+   *
+   *   { "extends": "@caxperts/toolkit-plugin-sdk/tsconfig.plugin.json", "include": ["src"] }
+   *
+   * This file is compilerOptions ONLY. `include`, `exclude`, `files` and `paths` are deliberately
+   * absent: relative paths in an extended config resolve against the file they came from, so an
+   * `"include": ["src"]` here would point every plugin at
+   * node_modules/@caxperts/toolkit-plugin-sdk/src instead of its own sources.
+   *
+   * Existing plugins are unaffected — extending this is opt-in, and a plugin that sets any option
+   * below itself wins, because a child tsconfig overrides its base.
+   */
+  "compilerOptions": {
+    "target": "es2023",
+    /* DOM for the browser APIs a page uses; DOM.Iterable for FormData/URLSearchParams iteration. */
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "esnext",
+
+    /*
+     * "bundler" is the only resolution mode that reads a package's `exports` map, which is the sole
+     * reason `@caxperts/toolkit-plugin-sdk/ui/data-grid` resolves at all. Under "node10" the map is ignored
+     * entirely and every ui/ and data/ import is TS2307.
+     */
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+
+    /*
+     * Build-affecting, not just a typecheck setting. Vite's oxc transform reads tsconfig `jsx` and
+     * maps it onto its own preset: "react-jsx" keeps the automatic runtime, while "react" would emit
+     * React.createElement into a bundle that never imports React — a runtime failure produced by a
+     * tsconfig option. Pinned here so a plugin cannot get it wrong by accident.
+     */
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+
+    /*
+     * The SDK ships compiled `.js` + `.d.ts` (see plugin-kit/tsconfig.build.json), so a plugin's program
+     * no longer pulls in SDK source that imports siblings with explicit `.ts` extensions —
+     * allowImportingTsExtensions is therefore gone. noEmit stays because a plugin's own typecheck is
+     * `tsc --noEmit`; emitting the bundle is Vite's job regardless.
+     */
+    "noEmit": true,
+
+    "verbatimModuleSyntax": true,
+    /* So `import { id } from '../plugin.json'` works — one way to stop repeating the id. */
+    "resolveJsonModule": true,
+
+    "strict": true,
+    /* Non-negotiable with DevExtreme's .d.ts surface in the program. */
+    "skipLibCheck": true,
+
+    /*
+     * Two jobs. It supplies `declare module '*.css'`, so `import './styles.css'` typechecks. And it
+     * STOPS the automatic inclusion of every @types/* package found by walking up the directory tree
+     * — which from a plugin inside this repository reaches the root app's node_modules/@types and
+     * makes the program depend on which app was installed last. A partner outside the repository
+     * would then get a different program than one inside it, for the same sources.
+     */
+    "types": ["vite/client"]
+
+    /*
+     * Deliberately NOT set here: noUnusedLocals / noUnusedParameters. They are house style rather
+     * than a compatibility contract, and they fire on a half-written page mid-edit. Turn them on in
+     * your own tsconfig.json if you want them — plugin-kit/example-hello does.
+     */
+  }
+}

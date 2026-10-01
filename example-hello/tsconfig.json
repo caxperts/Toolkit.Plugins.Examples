@@ -1,0 +1,29 @@
+{
+  /*
+   * A plugin's whole tsconfig. Everything load-bearing — module resolution that reads the SDK's
+   * exports map, the JSX runtime Vite's transform also reads, the TS-source import rules the SDK
+   * needs — comes from the base; see plugin-kit/tsconfig.plugin.json for why each one is there.
+   *
+   * `vite.config.ts` is deliberately NOT included. It imports the SDK's Vite preset, which reads
+   * plugin.json through node:fs, so including it would pull the preset into this program and demand
+   * @types/node from every plugin. The host excludes plugin-kit/src/vite/** from its own tsconfig for
+   * the same reason. Vite validates that file when it loads it.
+   */
+  "extends": "@caxperts/toolkit-plugin-sdk/tsconfig.plugin.json",
+  "compilerOptions": {
+    /*
+     * This example consumes the SDK via `"@caxperts/toolkit-plugin-sdk": "file:.."`, which npm
+     * installs as a SYMLINK. Without this, tsc resolves the symlink to its realpath and then resolves
+     * the SDK's re-exports (e.g. `export * from 'devextreme-react/data-grid'` in src/ui) from the SDK
+     * folder — which has no node_modules — instead of from THIS plugin's node_modules where
+     * devextreme-react is installed. In CI that is a clean TS2307; locally it silently resolves to the
+     * root app's older devextreme-react and passes. A real partner installs the SDK tarball as real
+     * files nested under their plugin, so they never hit this and never need the flag — it is here only
+     * because the repo consumes the SDK from the folder. See plugin-kit/README.md, "DevExtreme widgets".
+     */
+    "preserveSymlinks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,38 @@
+{
+  /*
+   * The SDK's own typecheck. The host's `tsc -b` covers the contract and the CSS prefixer, but
+   * deliberately excludes src/vite/**, which imports 'vite' — that does not resolve from this
+   * folder in the host's program. Here it does, because the SDK's devDependencies are installed.
+   *
+   * Run by the plugin canary step in caxperts-azure-pipelines-net.yml.
+   *
+   * src/ui/** and src/data/** are excluded below. They re-export from devextreme-react / devextreme,
+   * which are OPTIONAL peers — not installed here, so typechecking them would report TS2307 for every
+   * one of the 29 files and say nothing about whether they are correct. They are verified a different
+   * way: `pluginRuntimeSurface.test.ts` in the host asserts each shim targets exactly the module the
+   * matching host facade targets, and the host's own `tsc -b` proves those targets resolve. So a typo
+   * in a shim fails the host suite rather than passing unnoticed.
+   */
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    // src/vite/** reads plugin.json through node:fs, so this program needs the Node types. Stated
+    // explicitly rather than left to automatic @types discovery, which walks up to the repo root and
+    // makes the result depend on which app was installed last.
+    "types": ["node"]
+  },
+  "include": ["src"],
+  "exclude": ["src/ui", "src/data"]
+}

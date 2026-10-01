@@ -1,0 +1,92 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Backend half of the example plugin, and the documented template for a partner's own.
+
+    The build settings a plugin cannot inherit from backend/ live in ../Directory.Build.props — target
+    framework, nullability, warnings-as-errors, configurations, dynamic loading — with the reason for
+    each. What is left here is what is specific to THIS project.
+
+    ASSEMBLY NAME: deliberately NOT Toolkit.*. PluginLoadContext.IsHostOwned prefix-matches "Toolkit.",
+    so any assembly whose simple name starts with it is delegated to the host's own load context. An
+    entry assembly survives that because the loader loads it explicitly by path, but the moment anything
+    resolves it BY NAME the host is asked for an assembly it does not have and the load fails with
+    FileNotFoundException. Same applies to System.*, Microsoft.*, Azure.*, Swashbuckle.*, netstandard,
+    mscorlib and the third-party libraries the host ships — see PluginLoadContext for the list. Pick a
+    prefix of your own.
+  -->
+
+  <PropertyGroup>
+    <AssemblyName>Example.Hello</AssemblyName>
+    <RootNamespace>Example.Hello</RootNamespace>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      A PARTNER replaces all three ProjectReferences with ONE PackageReference, restored from nuget.org:
+
+        <PackageReference Include="CAXperts.Toolkit.Plugins.Abstractions" Version="2026.4.0" ExcludeAssets="runtime;native" />
+
+      That package carries all three assemblies below (see its csproj), so there is nothing else to
+      reference and no versions to keep in step. Its version is the host release it was published
+      with (the npm SDK on npmjs.com carries the same one). This copy of the example builds from
+      source instead because it lives in the host repository, where the packages are a release decision
+      rather than a product of every CI run — which is also why the references here stay split.
+
+      Private=false + ExcludeAssets keeps the SDK OUT of the package: the host supplies it and its type
+      identity must be the host's. All three are named explicitly, because otherwise Abstractions' own
+      references would be copied in transitively. A stray copy is inert rather than dangerous, but a lean
+      package makes version mistakes visible instead of hiding them behind a DLL nobody loads —
+      `npm run pack` warns if any slip in.
+
+      "native" is listed alongside "runtime" because they are separate NuGet asset classes and excluding
+      only the latter is not enough. Toolkit.Data brings EF SqlServer, which brings
+      Microsoft.Data.SqlClient, whose runtimes/win-*/native/…SNI.dll are native assets: they survived a
+      runtime-only exclusion and made the package 717 kB instead of 34 kB — 700 kB of Windows-only
+      binaries in a package whose destination is a Linux container, duplicating a library the host
+      already ships.
+    -->
+    <ProjectReference Include="..\..\..\backend\src\Toolkit.Plugins.Abstractions\Toolkit.Plugins.Abstractions.csproj">
+      <!-- IToolkitPlugin, IPluginContext, PluginControllerBase, PluginSchemaValidator
+           (namespace Toolkit.Plugins.Abstractions) -->
+      <Private>false</Private>
+      <ExcludeAssets>runtime;native</ExcludeAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\backend\src\Toolkit.Domain\Toolkit.Domain.csproj">
+      <!-- ICurrentUser and the host entities (namespaces Toolkit.Domain.Interfaces / .Entities) -->
+      <Private>false</Private>
+      <ExcludeAssets>runtime;native</ExcludeAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\backend\src\Toolkit.Data\Toolkit.Data.csproj">
+      <!-- ToolkitDbContext. NOTE the namespace is Toolkit.Infrastructure.Data, not Toolkit.Data — the
+           assembly was split out of Toolkit.Infrastructure and kept its namespaces so 40+ host files did
+           not have to change. See the type/namespace/package table in REQUIRED_DOCS/PLUGINS.md. -->
+      <Private>false</Private>
+      <ExcludeAssets>runtime;native</ExcludeAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!--
+    NO Microsoft.EntityFrameworkCore.Design reference, and no IDesignTimeDbContextFactory. `dotnet ef`
+    cannot work against a plugin, and adding those would not fix it:
+
+      * Design is PrivateAssets=all in Toolkit.Data, so it does not flow here. Referencing it directly
+        gets `dotnet ef` as far as constructing the context, and it then fails to load
+        Microsoft.EntityFrameworkCore.SqlServer — because ExcludeAssets above deliberately keeps the
+        host's assemblies out of the plugin's output.
+      * Relaxing ExcludeAssets in Debug would make it work, at the price of a Debug build whose output
+        contains host assemblies while the Release build's does not — divergence in exactly the dimension
+        that produced the 717 kB package, and in the one a plugin author stages and runs locally.
+
+    Migrations are hand-written instead (see HelloDbContext.cs), which is all Migrate() needs — a model
+    snapshot is required by `migrations add`, not by applying. migrations/001_plg_hello.sql is generated
+    from those migrations in-process by PluginMigrationScriptTests, which needs neither the tool nor a
+    database. See REQUIRED_DOCS/PLUGINS.md.
+  -->
+
+</Project>

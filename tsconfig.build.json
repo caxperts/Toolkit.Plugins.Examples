@@ -1,0 +1,37 @@
+{
+  /*
+   * The SDK's PUBLISH build. `npm run build` runs this and then finish-build.mjs; the result is what
+   * ships in the tarball (files[] carries dist/, not src/).
+   *
+   * Why this exists at all: a published package's `exports` map resolves to files physically inside a
+   * consumer's node_modules, and Node 22.18+/24 REFUSES to strip types from any .ts under node_modules
+   * (ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING). A plugin's vite.config.ts imports
+   * '@caxperts/toolkit-plugin-sdk/vite', which Vite loads through Node's own ESM resolver — so the entrypoint has
+   * to be real JavaScript. Shipping .js + .d.ts is the fix for the whole class of problem.
+   *
+   * In-repo this never bit, because plugin-kit/example-hello resolves the SDK through a `file:` symlink and
+   * Node realpaths that back OUT of node_modules; a packed .tgz copies the files in for real, which is
+   * the only path that ever hit it.
+   *
+   * Extends the typecheck config, so the two cannot drift on strictness or lib. Only the emit switches
+   * differ. src/ui and src/data stay EXCLUDED (inherited): they re-export devextreme(-react), an optional
+   * peer not installed here, so tsc cannot resolve them — finish-build.mjs copies them verbatim instead
+   * (they carry no types to strip, so the .js and .d.ts are byte-identical to the source).
+   */
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    /*
+     * The SDK's own modules import each other with explicit `.ts` extensions (see src/index.ts). This
+     * rewrites those to `.js` in BOTH the emitted .js and the .d.ts, so the shipped files reference real
+     * siblings — without it the output would import './types.ts', which resolves to nothing at runtime.
+     */
+    "rewriteRelativeImportExtensions": true,
+    /* House-style typecheck flags fire on emit paths tsc does not fully analyse; irrelevant to a build. */
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  }
+}

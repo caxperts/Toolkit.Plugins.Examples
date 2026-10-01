@@ -1,0 +1,68 @@
+{
+  "id": "hello",
+  "name": "Hello World",
+  "version": "1.1.1",
+  "apiVersion": 1,
+  "publisher": "CAXperts GmbH",
+  "entryAssembly": "backend/Example.Hello.dll",
+  "database": {
+    "schema": "plg_hello"
+  },
+  "frontend": {
+    "entry": "frontend/index.js",
+    "css": [
+      "frontend/style.css"
+    ],
+    "menu": [
+      {
+        "path": "",
+        "label": "hello.Hello World",
+        "icon": "extension",
+        "section": "nav",
+        "order": 50
+      }
+    ]
+  },
+  "translations": {
+    "en-US": {
+      "hello.Hello World": "Hello World",
+      "hello.Signed in as": "Signed in as",
+      "hello.Theme": "Theme",
+      "hello.Groups": "Groups",
+      "hello.Open the report": "Open the report",
+      "hello.Report": "Report",
+      "hello.Greetings": "Greetings",
+      "hello.Message": "Message",
+      "hello.Created": "Created",
+      "hello.Add greeting": "Add greeting",
+      "hello.Greeting added": "Greeting added",
+      "hello.Greeting deleted": "Greeting deleted",
+      "hello.Delete": "Delete",
+      "hello.Refresh": "Refresh",
+      "hello.No greetings yet": "No greetings yet",
+      "hello.Could not load greetings": "Could not load greetings",
+      "hello.Could not save the greeting": "Could not save the greeting",
+      "hello.Could not delete the greeting": "Could not delete the greeting"
+    },
+    "de-DE": {
+      "hello.Hello World": "Hallo Welt",
+      "hello.Signed in as": "Angemeldet als",
+      "hello.Theme": "Design",
+      "hello.Groups": "Gruppen",
+      "hello.Open the report": "Bericht öffnen",
+      "hello.Report": "Bericht",
+      "hello.Greetings": "Grüße",
+      "hello.Message": "Nachricht",
+      "hello.Created": "Erstellt",
+      "hello.Add greeting": "Gruß hinzufügen",
+      "hello.Greeting added": "Gruß hinzugefügt",
+      "hello.Greeting deleted": "Gruß gelöscht",
+      "hello.Delete": "Löschen",
+      "hello.Refresh": "Aktualisieren",
+      "hello.No greetings yet": "Noch keine Grüße",
+      "hello.Could not load greetings": "Grüße konnten nicht geladen werden",
+      "hello.Could not save the greeting": "Gruß konnte nicht gespeichert werden",
+      "hello.Could not delete the greeting": "Gruß konnte nicht gelöscht werden"
+    }
+  }
+}
