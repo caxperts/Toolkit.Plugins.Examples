@@ -1,8 +1,16 @@
 {
   "name": "@caxperts/toolkit-plugin-sdk",
-  "version": "2026.4.0",
+  "version": "2026.4.1",
   "description": "SDK for building Toolkit frontend plugins",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caxperts/Toolkit.Plugins.Examples.git"
+  },
+  "homepage": "https://github.com/caxperts/Toolkit.Plugins.Examples#readme",
+  "bugs": {
+    "url": "https://github.com/caxperts/Toolkit.Plugins.Examples/issues"
+  },
   "private": false,
   "type": "module",
   "exports": {

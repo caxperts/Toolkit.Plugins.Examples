@@ -924,7 +924,7 @@ npm run pack         # build, then package -> ${id}-1.0.0.zip
 The \`.csproj\` carries ONE host reference, \`CAXperts.Toolkit.Plugins.Abstractions\`, pinned to
 \`PluginSdkPackageVersion\` in \`Directory.Build.props\`. That single package brings \`Toolkit.Data\`
 (\`ToolkitDbContext\`) and \`Toolkit.Domain\` (the entities) with it, so there is no second version to keep
-in step. See \`REQUIRED_DOCS/PLUGINS.md\` for the type/namespace/package map and the full contract.
+in step. See https://github.com/caxperts/Toolkit.Plugins.Examples for the type/namespace/package map and the full contract.
 
 **Version this plugin, never the host assemblies it binds.** A plugin binds the exact
 \`AssemblyVersion\` it compiled against, and the host assemblies inside the SDK package carry the
@@ -942,7 +942,7 @@ This scaffold is frontend-only. Re-run \`new-plugin\` without \`--frontend-only\
 
   return `# ${name}
 
-A Toolkit plugin. Contract, trust model and packaging rules: \`REQUIRED_DOCS/PLUGINS.md\`.
+A Toolkit plugin. Contract, trust model and packaging rules: https://github.com/caxperts/Toolkit.Plugins.Examples.
 
 ${commands}
 

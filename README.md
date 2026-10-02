@@ -3,7 +3,7 @@
 The Toolkit plugin kit: the frontend SDK **and** the scripts that scaffold, validate and package a
 plugin. A plugin ships as one folder with a frontend half, a `server/` .NET half, or both.
 
-Full contract, trust model and packaging rules: [`REQUIRED_DOCS/PLUGINS.md`](../REQUIRED_DOCS/PLUGINS.md).
+Full contract, trust model and packaging rules: [github.com/caxperts/Toolkit.Plugins.Examples](https://github.com/caxperts/Toolkit.Plugins.Examples).
 
 ## Steps to create a plugin
 
@@ -62,7 +62,7 @@ prefix by hand.
 
 Write ordinary CSS in `src/styles.css`; the build prefixes every selector with `.tk-plugin-<id>` so
 nothing leaks into the host. Never use a literal colour — only `var(--system-*)` / `var(--*-gradient)`,
-which keeps the page readable in both Dark and Vienna (see [`THEMING.md`](../REQUIRED_DOCS/THEMING.md)).
+which keeps the page readable in both Dark and Vienna (see the [GitHub repository](https://github.com/caxperts/Toolkit.Plugins.Examples)).
 
 ### 8. (Backend only) Own your data
 
@@ -117,12 +117,12 @@ These are not optional and the build/loader rejects violations, so they are wort
 ## Reference
 
 - Full contract, security/stability model, database and packaging rules:
-  [`REQUIRED_DOCS/PLUGINS.md`](../REQUIRED_DOCS/PLUGINS.md).
-- Worked full-stack example and living style guide: [`example-hello/`](example-hello/).
+  [github.com/caxperts/Toolkit.Plugins.Examples](https://github.com/caxperts/Toolkit.Plugins.Examples).
+- Worked full-stack example and living style guide: [`example-hello/`](https://github.com/caxperts/Toolkit.Plugins.Examples/tree/main/example-hello).
 - `http` only accepts same-origin `/api/…` paths — a guard rail against leaking the bearer token, **not**
   a security boundary (plugin code runs in the host origin and can call `fetch` directly).
 
 ## License
 
 The plugin SDK — this npm package and the `CAXperts.Toolkit.Plugins.Abstractions` NuGet package — is
-released under the [MIT License](LICENSE). The license covers the SDK only, not the Toolkit host.
+released under the [MIT License](https://github.com/caxperts/Toolkit.Plugins.Examples/blob/main/LICENSE). The license covers the SDK only, not the Toolkit host.

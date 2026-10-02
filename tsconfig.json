@@ -4,7 +4,7 @@
    * deliberately excludes src/vite/**, which imports 'vite' — that does not resolve from this
    * folder in the host's program. Here it does, because the SDK's devDependencies are installed.
    *
-   * Run by the plugin canary step in caxperts-azure-pipelines-net.yml.
+   * Run by the plugin canary step in caxperts-azure-pipelines-net-docker.yml.
    *
    * src/ui/** and src/data/** are excluded below. They re-export from devextreme-react / devextreme,
    * which are OPTIONAL peers — not installed here, so typechecking them would report TS2307 for every

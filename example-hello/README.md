@@ -6,7 +6,7 @@ Both halves live here and one `plugin.json` describes them: the frontend in `src
 `server/`, and the DBA script in `migrations/`. The folder is deliberately self-contained, so it can
 be handed to a partner as it stands.
 
-Full contract: [`REQUIRED_DOCS/PLUGINS.md`](../../REQUIRED_DOCS/PLUGINS.md).
+Full contract: [github.com/caxperts/Toolkit.Plugins.Examples](https://github.com/caxperts/Toolkit.Plugins.Examples).
 
 ## Build
 
