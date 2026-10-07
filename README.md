@@ -10,14 +10,14 @@ Full contract, trust model and packaging rules: [github.com/caxperts/Toolkit.Plu
 ### 1. Install the SDK
 
 Released versions are on [npmjs.com](https://www.npmjs.com/package/@caxperts/toolkit-plugin-sdk),
-versioned like the host release they belong to (`2026.4.0` for host 2026.4.0):
+versioned like the host release they belong to, so install the version of the host you build against:
 
 ```bash
-npm i -D @caxperts/toolkit-plugin-sdk@2026.4.0
+npm i -D @caxperts/toolkit-plugin-sdk@2026.4.1
 ```
 
 If you were given a tarball from a build instead (an unreleased version is only ever a pipeline
-artifact), install that: `npm i -D ./caxperts-toolkit-plugin-sdk-2026.4.0.tgz`.
+artifact), install that: `npm i -D ./caxperts-toolkit-plugin-sdk-2026.4.1.tgz`.
 
 ### 2. Scaffold the plugin
 

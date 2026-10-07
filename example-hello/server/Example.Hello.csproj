@@ -30,7 +30,7 @@
     <!--
       A PARTNER replaces all three ProjectReferences with ONE PackageReference, restored from nuget.org:
 
-        <PackageReference Include="CAXperts.Toolkit.Plugins.Abstractions" Version="2026.4.0" ExcludeAssets="runtime;native" />
+        <PackageReference Include="CAXperts.Toolkit.Plugins.Abstractions" Version="2026.4.1" ExcludeAssets="runtime;native" />
 
       That package carries all three assemblies below (see its csproj), so there is nothing else to
       reference and no versions to keep in step. Its version is the host release it was published

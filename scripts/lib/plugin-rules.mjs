@@ -48,8 +48,13 @@ export const SUPPORTED_API_VERSION = 1
  * same host SDK version this repository publishes. A partner bumps it (and the matching host) as one
  * decision; keeping it here rather than hardcoded in the template keeps the scaffold from drifting from
  * the package it is meant to build against.
+ *
+ * Not read from package.json: in this repository that is the 0.x dev version, which is never on
+ * nuget.org, while this literal is a release that is. The two meet at release time instead -
+ * `npm version <release>` runs sync-version.mjs, which rewrites this line (and every doc that quotes
+ * the version) to the version being published, so the tarball and the GitHub mirror carry it.
  */
-export const SDK_PACKAGE_VERSION = '2026.4.0'
+export const SDK_PACKAGE_VERSION = '2026.4.1'
 
 /**
  * Mirrors the PluginIconName union in plugin-kit/src/types.ts and the ICONS map in

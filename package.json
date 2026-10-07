@@ -50,6 +50,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node finish-build.mjs",
     "typecheck": "tsc --noEmit",
+    "version": "node sync-version.mjs",
     "prepack": "npm run build"
   },
   "peerDependencies": {
