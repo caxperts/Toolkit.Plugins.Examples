@@ -54,7 +54,7 @@ export const SUPPORTED_API_VERSION = 1
  * `npm version <release>` runs sync-version.mjs, which rewrites this line (and every doc that quotes
  * the version) to the version being published, so the tarball and the GitHub mirror carry it.
  */
-export const SDK_PACKAGE_VERSION = '2026.4.2'
+export const SDK_PACKAGE_VERSION = '2026.4.3'
 
 /**
  * Mirrors the PluginIconName union in plugin-kit/src/types.ts and the ICONS map in

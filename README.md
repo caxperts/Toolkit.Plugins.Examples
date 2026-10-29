@@ -13,11 +13,11 @@ Released versions are on [npmjs.com](https://www.npmjs.com/package/@caxperts/too
 versioned like the host release they belong to, so install the version of the host you build against:
 
 ```bash
-npm i -D @caxperts/toolkit-plugin-sdk@2026.4.2
+npm i -D @caxperts/toolkit-plugin-sdk@2026.4.3
 ```
 
 If you were given a tarball from a build instead (an unreleased version is only ever a pipeline
-artifact), install that: `npm i -D ./caxperts-toolkit-plugin-sdk-2026.4.2.tgz`.
+artifact), install that: `npm i -D ./caxperts-toolkit-plugin-sdk-2026.4.3.tgz`.
 
 ### 2. Scaffold the plugin
 
